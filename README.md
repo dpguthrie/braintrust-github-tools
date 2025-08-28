@@ -23,9 +23,20 @@ git clone https://github.com/dpguthrie/braintrust-github-tools.git
 cd braintrust-github-tools
 ```
 
-### 2. Install Dependencies
-For local development and deployment:
+### 2. Set Up Virtual Environment and Install Dependencies
+
+**Option A: Using uv (Recommended)**
 ```bash
+# Install uv if you haven't already: https://docs.astral.sh/uv/
+uv venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv pip install -r requirements-dev.txt
+```
+
+**Option B: Using standard Python tools**
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements-dev.txt
 ```
 
@@ -41,6 +52,7 @@ export BRAINTRUST_API_KEY="your_braintrust_api_key"
 Get your API key from: https://www.braintrust.dev/app/settings
 
 ### 4. Deploy to Braintrust
+Make sure your virtual environment is activated, then:
 ```bash
 braintrust push github_tools.py --requirements requirements.txt
 ```
@@ -310,8 +322,9 @@ If you don't need all 8 tools, you can remove specific ones:
 ## Support
 
 For issues with these tools:
-1. Check GitHub API status
-2. Verify your token has necessary permissions  
-3. Review Braintrust logs for detailed error messages
-4. Check rate limit headers in responses
-5. Ensure you're using the correct deployment command with requirements: `braintrust push github_tools.py --requirements requirements.txt`
+1. **Check your virtual environment** is activated before deployment
+2. Check GitHub API status
+3. Verify your token has necessary permissions  
+4. Review Braintrust logs for detailed error messages
+5. Check rate limit headers in responses
+6. Ensure you're using the correct deployment command with requirements: `braintrust push github_tools.py --requirements requirements.txt`
