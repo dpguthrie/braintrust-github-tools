@@ -19,8 +19,8 @@ A comprehensive set of GitHub API tools designed to work together for exploring 
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
-cd braintrust-playground/github_tools
+git clone https://github.com/dpguthrie/braintrust-github-tools.git
+cd braintrust-github-tools
 ```
 
 ### 2. Install Dependencies
