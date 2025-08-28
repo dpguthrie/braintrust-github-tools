@@ -2,6 +2,49 @@
 
 A comprehensive set of GitHub API tools designed to work together for exploring repositories, issues, pull requests, and more. These tools are optimized for use with Braintrust's AI platform.
 
+## Table of Contents
+
+- [Quick Start](#quick-start)
+- [Features](#features)  
+- [Tools Included](#tools-included)
+- [Tool Chaining Examples](#tool-chaining-examples)
+- [GitHub Token Setup](#github-token-setup-recommended)
+- [Usage in Braintrust](#usage-in-braintrust)
+- [Customizing Tools](#customizing-tools)
+- [File Structure](#file-structure)
+- [Security Notes](#security-notes)
+- [Support](#support)
+
+## Quick Start
+
+### 1. Clone the Repository
+```bash
+git clone <repository-url>
+cd braintrust-playground/github_tools
+```
+
+### 2. Install Dependencies
+For local development and deployment:
+```bash
+pip install -r requirements-dev.txt
+```
+
+**Requirements Files:**
+- `requirements-dev.txt`: Contains `braintrust[cli]` for local development and deployment
+- `requirements.txt`: Contains only runtime dependencies (`braintrust`, `requests`, `pydantic`) needed by the tools when running in Braintrust
+
+### 3. Set Braintrust API Key (Required for Deployment)
+```bash
+export BRAINTRUST_API_KEY="your_braintrust_api_key"
+```
+
+Get your API key from: https://www.braintrust.dev/app/settings
+
+### 4. Deploy to Braintrust
+```bash
+braintrust push github_tools.py --requirements requirements.txt
+```
+
 ## Features
 
 - **Chainable Tools**: Outputs from one tool provide perfect context for others
@@ -94,20 +137,9 @@ Get contributor information for a repository.
 3. **List Issues**: See related issues in same repo
 4. **User Info**: Research issue authors
 
-## Setup
+## GitHub Token Setup (Recommended)
 
-### 1. Install Dependencies
-
-For local development and deployment:
-```bash
-pip install -r requirements-dev.txt
-```
-
-**Requirements Files:**
-- `requirements-dev.txt`: Contains `braintrust[cli]` for local development and deployment
-- `requirements.txt`: Contains only runtime dependencies (`braintrust`, `requests`, `pydantic`) needed by the tools when running in Braintrust
-
-### 2. Set GitHub Token in Braintrust (Recommended)
+### Set GitHub Token in Braintrust
 Instead of setting environment variables locally, configure the `GITHUB_TOKEN` as an environment variable within the Braintrust platform:
 
 1. Go to your Braintrust project settings
@@ -127,19 +159,6 @@ This approach is more secure and ensures the token is available when tools run i
 1. Go to GitHub Settings → Developer settings → Personal access tokens
 2. Generate a new token with appropriate permissions (public_repo for public repos)
 3. Copy the token and add it to Braintrust environment variables
-
-### 3. Set Braintrust API Key (Required for Deployment)
-```bash
-export BRAINTRUST_API_KEY="your_braintrust_api_key"
-```
-
-Get your API key from: https://www.braintrust.dev/app/settings
-
-### 4. Deploy to Braintrust
-```bash
-cd github_tools
-braintrust push github_tools.py --requirements requirements.txt
-```
 
 ## Usage in Braintrust
 
@@ -237,8 +256,9 @@ github_tools/
     └── repository_contributors.py  # Get repository contributors
 ```
 
-## Contributing
+## Customizing Tools
 
+### Adding New Tools
 To add new GitHub API endpoints:
 
 1. Create a new `.py` file following the existing pattern
@@ -246,6 +266,37 @@ To add new GitHub API endpoints:
 3. Create the tool with `project.tools.create()`
 4. Add import to `github_tools.py`
 5. Update this README
+
+### Removing Tools (Optional)
+If you don't need all 8 tools, you can remove specific ones:
+
+1. **Remove the import** from `github_tools.py`:
+   ```python
+   # Comment out or remove unwanted tools
+   # from search_issues import search_issues
+   # from repository_contributors import repository_contributors
+   ```
+
+2. **Remove from the `_tools` list** in `github_tools.py`:
+   ```python
+   _tools = [
+       search_repositories,
+       repository_details,
+       list_issues,
+       list_pull_requests,
+       # search_issues,        # Removed
+       repository_contents,
+       user_info,
+       # repository_contributors,  # Removed
+   ]
+   ```
+
+3. **Redeploy** to Braintrust:
+   ```bash
+   braintrust push github_tools.py --requirements requirements.txt
+   ```
+
+**Note**: Removing tools will make them unavailable to your prompts. Make sure any prompts using those tools are updated accordingly.
 
 ## Security Notes
 
